@@ -40,6 +40,7 @@ public class RandomEmojiKeyboard extends InputMethodService {
 
     public void onKey(View view) {
         InputConnection ic = getCurrentInputConnection();
+        ic.commitText("", 1);
 
         switch (view.getId()) {
             case R.id.backspace:
