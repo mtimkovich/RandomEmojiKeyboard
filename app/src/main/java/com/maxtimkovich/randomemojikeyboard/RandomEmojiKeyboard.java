@@ -44,15 +44,20 @@ public class RandomEmojiKeyboard extends InputMethodService {
 
         switch (view.getId()) {
             case R.id.backspace:
-                // Emojis are rendered as 2 characters, delete twice for emojis
+                // Emojis are rendered as 2 or 4 characters
+                // delete twice or four for emojis
                 // and once for normal characters
-                CharSequence prev = ic.getTextBeforeCursor(2, 0);
+                for (int i = 8; i > 0; i--) {
+                    CharSequence seq = ic.getTextBeforeCursor(i, 0);
 
-                if (EmojiManager.isEmoji(prev.toString())) {
-                    ic.deleteSurroundingText(2, 0);
-                } else {
-                    ic.deleteSurroundingText(1, 0);
+                    if (EmojiManager.isEmoji(seq.toString())) {
+                        ic.deleteSurroundingText(i, 0);
+                        break;
+                    } else if (i == 1) {
+                        ic.deleteSurroundingText(1, 0);
+                    }
                 }
+
                 break;
             case R.id.enter:
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
