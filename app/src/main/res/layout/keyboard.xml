@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <ImageButton
+        android:id="@+id/backspace"
+        android:layout_width="70sp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_backspace_black_24dp"
+        style="?android:attr/borderlessButtonStyle" />
+    />
+
+    <Button
+        android:id="@+id/emoji"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="90sp"
+        android:layout_below="@id/backspace"
+        android:layout_centerHorizontal="true"
+        android:text="@string/emoji"
+        android:onClick="onKey"
+        style="?android:attr/borderlessButtonStyle" />
+    />
+
+    <ImageButton
+        android:id="@+id/enter"
+        android:layout_width="70sp"
+        android:layout_height="70sp"
+        android:layout_below="@id/emoji"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/ic_keyboard_return_black_24dp"
+        android:onClick="onKey"
+        style="?android:attr/borderlessButtonStyle" />
+    />
+</RelativeLayout>
