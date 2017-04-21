@@ -6,15 +6,36 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
 
+import com.vdurmont.emoji.Emoji;
+import com.vdurmont.emoji.EmojiManager;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class RandomEmojiKeyboard extends InputMethodService {
+    List<Emoji> emojis;
 
     @Override
     public View onCreateInputView() {
         View v = getLayoutInflater().inflate(R.layout.keyboard, null);
+        emojis = new ArrayList<>(EmojiManager.getAll());
 
         return v;
+    }
+
+    public String getRandomEmoji() {
+        Random rng = new Random();
+        Paint paint = new Paint();
+        String emoji;
+
+        // Get random emojis until get one that is compatible with device
+        do {
+            int randIndex = rng.nextInt(emojis.size());
+            emoji = emojis.get(randIndex).getUnicode();
+        } while (!paint.hasGlyph(emoji));
+
+        return emoji;
     }
 
     public void onKey(View view) {
@@ -26,8 +47,7 @@ public class RandomEmojiKeyboard extends InputMethodService {
                 // and once for normal characters
                 CharSequence prev = ic.getTextBeforeCursor(2, 0);
 
-                if (prev.length() > 1  &&
-                        Character.isSurrogatePair(prev.charAt(0), prev.charAt(1))) {
+                if (EmojiManager.isEmoji(prev.toString())) {
                     ic.deleteSurroundingText(2, 0);
                 } else {
                     ic.deleteSurroundingText(1, 0);
@@ -37,34 +57,8 @@ public class RandomEmojiKeyboard extends InputMethodService {
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
                 break;
             default:
-                int[][] emojiInts = {
-                        {0x1F600, 0x1F64F}, // emoticons
-                        {0x1F300, 0x1F5FF}, // symbols and pictographs
-                        {0x1F680, 0x1F6FF}, // transport and maps
-                        {0x1F1E0, 0x1F1FF}, // flags
-                };
-
-                // Loop until we find a valid emoji
-                // I'm not sure if there's a more efficient way to do this
-                while (true) {
-                    Random rand = new Random();
-
-                    int type = rand.nextInt(emojiInts.length);
-                    int[] category = emojiInts[type];
-                    int which = rand.nextInt(category[1] - category[0] + 1) + category[0];
-
-                    StringBuffer sb = new StringBuffer();
-                    sb.append(Character.toChars(which));
-
-                    String emoji = new String(sb);
-
-                    Paint paint = new Paint();
-
-                    if (paint.hasGlyph(emoji)) {
-                        ic.commitText(emoji, 1);
-                        break;
-                    }
-                }
+                String emoji = getRandomEmoji();
+                ic.commitText(emoji, 1);
         }
 
     }
