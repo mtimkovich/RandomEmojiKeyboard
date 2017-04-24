@@ -7,11 +7,10 @@
     <ImageButton
         android:id="@+id/backspace"
         android:layout_width="70sp"
-        android:layout_height="wrap_content"
+        android:layout_height="70sp"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_backspace_black_24dp"
-        android:onClick="onKey"
-        style="?android:attr/borderlessButtonStyle" />
+        style="?android:attr/borderlessButtonStyle"
     />
 
     <Button
@@ -23,7 +22,7 @@
         android:layout_centerHorizontal="true"
         android:text="@string/emoji"
         android:onClick="onKey"
-        style="?android:attr/borderlessButtonStyle" />
+        style="?android:attr/borderlessButtonStyle"
     />
 
     <ImageButton
@@ -34,6 +33,6 @@
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_keyboard_return_black_24dp"
         android:onClick="onKey"
-        style="?android:attr/borderlessButtonStyle" />
+        style="?android:attr/borderlessButtonStyle"
     />
 </RelativeLayout>

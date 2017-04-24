@@ -5,6 +5,7 @@ import android.inputmethodservice.InputMethodService;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.InputConnection;
+import android.widget.ImageButton;
 
 import com.vdurmont.emoji.Emoji;
 import com.vdurmont.emoji.EmojiManager;
@@ -20,6 +21,29 @@ public class RandomEmojiKeyboard extends InputMethodService {
     public View onCreateInputView() {
         View v = getLayoutInflater().inflate(R.layout.keyboard, null);
         emojis = new ArrayList<>(EmojiManager.getAll());
+
+        ImageButton backspace = (ImageButton) v.findViewById(R.id.backspace);
+        backspace.setOnTouchListener(new RepeatListener(400, 100, new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                InputConnection ic = getCurrentInputConnection();
+                ic.commitText("", 1);
+
+                // Emojis are rendered as 2 or 4 characters
+                // delete twice or four for emojis
+                // and once for normal characters
+                for (int i = 8; i > 0; i--) {
+                    CharSequence seq = ic.getTextBeforeCursor(i, 0);
+
+                    if (EmojiManager.isEmoji(seq.toString())) {
+                        ic.deleteSurroundingText(i, 0);
+                        break;
+                    } else if (i == 1) {
+                        ic.deleteSurroundingText(1, 0);
+                    }
+                }
+            }
+        }));
 
         return v;
     }
@@ -43,22 +67,6 @@ public class RandomEmojiKeyboard extends InputMethodService {
         ic.commitText("", 1);
 
         switch (view.getId()) {
-            case R.id.backspace:
-                // Emojis are rendered as 2 or 4 characters
-                // delete twice or four for emojis
-                // and once for normal characters
-                for (int i = 8; i > 0; i--) {
-                    CharSequence seq = ic.getTextBeforeCursor(i, 0);
-
-                    if (EmojiManager.isEmoji(seq.toString())) {
-                        ic.deleteSurroundingText(i, 0);
-                        break;
-                    } else if (i == 1) {
-                        ic.deleteSurroundingText(1, 0);
-                    }
-                }
-
-                break;
             case R.id.enter:
                 ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
                 break;
