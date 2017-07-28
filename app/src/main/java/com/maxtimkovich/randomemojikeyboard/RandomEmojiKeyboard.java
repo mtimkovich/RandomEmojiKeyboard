@@ -31,8 +31,9 @@ public class RandomEmojiKeyboard extends InputMethodService {
 
                 // Emojis are rendered as 2 or 4 characters
                 // delete twice or four for emojis
-                // and once for normal characters
-                for (int i = 8; i > 0; i--) {
+                // and once for normal characters.
+                // And some are 25 characters wth
+                for (int i = 30; i > 0; i--) {
                     CharSequence seq = ic.getTextBeforeCursor(i, 0);
 
                     if (EmojiManager.isEmoji(seq.toString())) {
