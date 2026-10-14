@@ -27,6 +27,7 @@ public class RandomEmojiKeyboard extends InputMethodService {
             @Override
             public void onClick(View v) {
                 InputConnection ic = getCurrentInputConnection();
+                if (ic == null) return;
                 ic.commitText("", 1);
 
                 // Emojis are rendered as 2 or 4 characters
@@ -35,6 +36,7 @@ public class RandomEmojiKeyboard extends InputMethodService {
                 // And some are 25 characters wth
                 for (int i = 30; i > 0; i--) {
                     CharSequence seq = ic.getTextBeforeCursor(i, 0);
+                    if (seq == null) return;
 
                     if (EmojiManager.isEmoji(seq.toString())) {
                         ic.deleteSurroundingText(i, 0);
@@ -45,6 +47,15 @@ public class RandomEmojiKeyboard extends InputMethodService {
                 }
             }
         }));
+
+        View.OnClickListener keyListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                onKey(view);
+            }
+        };
+        v.findViewById(R.id.emoji).setOnClickListener(keyListener);
+        v.findViewById(R.id.enter).setOnClickListener(keyListener);
 
         return v;
     }
@@ -65,16 +76,13 @@ public class RandomEmojiKeyboard extends InputMethodService {
 
     public void onKey(View view) {
         InputConnection ic = getCurrentInputConnection();
+        if (ic == null) return;
         ic.commitText("", 1);
 
-        switch (view.getId()) {
-            case R.id.enter:
-                ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
-                break;
-            default:
-                String emoji = getRandomEmoji();
-                ic.commitText(emoji, 1);
+        if (view.getId() == R.id.enter) {
+            ic.sendKeyEvent(new KeyEvent(KeyEvent.ACTION_DOWN, KeyEvent.KEYCODE_ENTER));
+        } else {
+            ic.commitText(getRandomEmoji(), 1);
         }
-
     }
 }

@@ -2,6 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/keyboardBackground"
     android:weightSum="1">
 
     <ImageButton
@@ -10,6 +11,7 @@
         android:layout_height="70sp"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_backspace_black_24dp"
+        android:tint="@color/keyboardIcon"
         style="?android:attr/borderlessButtonStyle"
     />
 
@@ -21,7 +23,6 @@
         android:layout_below="@id/backspace"
         android:layout_centerHorizontal="true"
         android:text="@string/emoji"
-        android:onClick="onKey"
         style="?android:attr/borderlessButtonStyle"
     />
 
@@ -32,7 +33,7 @@
         android:layout_below="@id/emoji"
         android:layout_alignParentRight="true"
         android:src="@drawable/ic_keyboard_return_black_24dp"
-        android:onClick="onKey"
+        android:tint="@color/keyboardIcon"
         style="?android:attr/borderlessButtonStyle"
     />
 </RelativeLayout>
